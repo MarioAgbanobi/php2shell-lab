@@ -1,0 +1,12 @@
+version: "3.8"
+
+services:
+  web:
+    image: php:8.4.4-apache
+    container_name: php2shell-lab
+    ports:
+      - "127.0.0.1:8080:80"
+    volumes:
+      - ./www:/var/www/html
+      - ./php.ini-overrides.ini:/usr/local/etc/php/conf.d/zz-lab-overrides.ini
+    restart: unless-stopped
