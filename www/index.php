@@ -20,6 +20,7 @@
     <?php endif; ?>
 
     <hr>
+    <a class="btn secondary" href="upload.php">Upload a File</a>
     <p class="hint">Upload progress check endpoint: <code>check_progress.php</code></p>
 </div>
 </body>

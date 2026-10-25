@@ -17,7 +17,6 @@ via Docker, for use alongside separate, clearly-labeled PoC/scanning tools.
 ## Setup
 
 ```bash
-docker compose build
 docker compose up -d
 docker ps
 ```
