@@ -1,3 +1,8 @@
+<<<<<<< HEAD
+=======
+version: "3.8"
+
+>>>>>>> 4eba12f06d2593944d09803e1b325a5f57e3be13
 services:
   web:
     image: php:8.4.4-apache
@@ -7,4 +12,8 @@ services:
     volumes:
       - ./www:/var/www/html
       - ./php.ini-overrides.ini:/usr/local/etc/php/conf.d/zz-lab-overrides.ini
+<<<<<<< HEAD
     restart: unless-stopped
+=======
+    restart: unless-stopped
+>>>>>>> 4eba12f06d2593944d09803e1b325a5f57e3be13

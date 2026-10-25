@@ -17,6 +17,10 @@ via Docker, for use alongside separate, clearly-labeled PoC/scanning tools.
 ## Setup
 
 ```bash
+<<<<<<< HEAD
+=======
+docker compose build
+>>>>>>> 4eba12f06d2593944d09803e1b325a5f57e3be13
 docker compose up -d
 docker ps
 ```
@@ -32,4 +36,8 @@ See the official advisory: https://www.php.net/archive/2026.php#2026-10-21-5
 
 ```bash
 docker compose down
+<<<<<<< HEAD
 ```
+=======
+```
+>>>>>>> 4eba12f06d2593944d09803e1b325a5f57e3be13
