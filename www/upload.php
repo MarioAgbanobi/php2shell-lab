@@ -9,23 +9,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
     $file = $_FILES['file'];
 
     if ($file['error'] === UPLOAD_ERR_OK) {
-        $uploadDir = __DIR__ . '/uploads/';
+        $allowedTypes = [
+            'jpg' => ['mime' => 'image/jpeg', 'extension' => 'jpg'],
+            'jpeg' => ['mime' => 'image/jpeg', 'extension' => 'jpg'],
+            'png' => ['mime' => 'image/png', 'extension' => 'png'],
+            'gif' => ['mime' => 'image/gif', 'extension' => 'gif'],
+            'webp' => ['mime' => 'image/webp', 'extension' => 'webp'],
+        ];
+        $extension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+        $imageInfo = @getimagesize($file['tmp_name']);
+        $mimeType = (new finfo(FILEINFO_MIME_TYPE))->file($file['tmp_name']);
 
-        if (!is_dir($uploadDir)) {
-            mkdir($uploadDir, 0777, true);
-        }
-
-        // INTENTIONALLY VULNERABLE: no extension filtering, no MIME check.
-        $filename = basename($file['name']);
-        $destination = $uploadDir . $filename;
-
-        if (move_uploaded_file($file['tmp_name'], $destination)) {
-            $uploadedFile = '/uploads/' . $filename;
-            $message = 'File uploaded successfully: ' . htmlspecialchars($filename);
-            $messageType = 'success';
-        } else {
-            $message = 'Upload failed. Check folder permissions.';
+        if (
+            !isset($allowedTypes[$extension])
+            || $imageInfo === false
+            || $mimeType !== $allowedTypes[$extension]['mime']
+            || $imageInfo['mime'] !== $allowedTypes[$extension]['mime']
+        ) {
+            $message = 'Only valid JPEG, PNG, GIF, or WebP images are allowed.';
             $messageType = 'error';
+        } else {
+            $uploadDir = __DIR__ . '/uploads/';
+
+            if (!is_dir($uploadDir) && !mkdir($uploadDir, 0750, true) && !is_dir($uploadDir)) {
+                $message = 'Upload failed. The upload directory could not be created.';
+                $messageType = 'error';
+            } else {
+                $extension = $allowedTypes[$extension]['extension'];
+                $filename = bin2hex(random_bytes(16)) . '.' . $extension;
+                $destination = $uploadDir . $filename;
+
+                if (move_uploaded_file($file['tmp_name'], $destination)) {
+                    $uploadedFile = '/uploads/' . $filename;
+                    $message = 'Image uploaded successfully.';
+                    $messageType = 'success';
+                } else {
+                    $message = 'Upload failed. Check folder permissions.';
+                    $messageType = 'error';
+                }
+            }
         }
     } else {
         $message = 'No file received or upload error.';
@@ -59,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
     <h1>File Upload</h1>
 
     <div class="warning">
-        ⚠️ Lab target. No file validation. For local authorized testing only.
+        Uploads are restricted to valid JPEG, PNG, GIF, and WebP images.
     </div>
 
     <?php if ($message): ?>
@@ -75,10 +97,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
         <input type="hidden" name="PHP_SESSION_UPLOAD_PROGRESS" value="lab_upload">
         <input type="hidden" name="MAX_FILE_SIZE" value="10485760">
         <div class="upload-box">
-            <input type="file" name="file" id="file" style="display:none" onchange="this.form.submit()">
+            <input type="file" name="file" id="file" accept="image/jpeg,image/png,image/gif,image/webp" style="display:none" onchange="this.form.submit()">
             <label for="file" style="cursor:pointer">
                 Click to choose a file<br>
-                <span style="font-size:0.8rem;color:#64748b">Any file type accepted</span>
+                <span style="font-size:0.8rem;color:#64748b">JPEG, PNG, GIF, or WebP only</span>
             </label>
         </div>
         <button type="submit">Upload</button>

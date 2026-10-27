@@ -17,10 +17,7 @@ via Docker, for use alongside separate, clearly-labeled PoC/scanning tools.
 ## Setup
 
 ```bash
-<<<<<<< HEAD
-=======
 docker compose build
->>>>>>> 4eba12f06d2593944d09803e1b325a5f57e3be13
 docker compose up -d
 docker ps
 ```
@@ -32,12 +29,13 @@ Then open `http://127.0.0.1:8080` in your browser.
 Patched PHP releases: 8.2.35, 8.3.36, 8.4.27, 8.5.12+.
 See the official advisory: https://www.php.net/archive/2026.php#2026-10-21-5
 
+The upload feature also applies application-level protections independently
+of PHP core updates: it accepts only validated JPEG, PNG, GIF, and WebP images,
+stores them under generated filenames, and denies direct requests for
+executable PHP-style extensions in the uploads directory.
+
 ## Stop the lab
 
 ```bash
 docker compose down
-<<<<<<< HEAD
 ```
-=======
-```
->>>>>>> 4eba12f06d2593944d09803e1b325a5f57e3be13

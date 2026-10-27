@@ -47,8 +47,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <p><a href="index.php">&larr; Back</a></p>
 </div>
 </body>
-<<<<<<< HEAD
 </html>
-=======
-</html>
->>>>>>> 4eba12f06d2593944d09803e1b325a5f57e3be13
